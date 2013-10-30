@@ -10,6 +10,7 @@ gem 'rails', '3.2.14'
 group :development, :test do
   gem 'sqlite3'
   gem 'ruby-debug19'
+  gem 'pry'
 end
 
 group :production do

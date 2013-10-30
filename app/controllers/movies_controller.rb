@@ -8,6 +8,7 @@ class MoviesController < ApplicationController
 
   def index
     # binding.pry
+    session.clear if params[:clear_session]
     # Ratings
     @all_ratings = Movie.all_ratings
     if params[:ratings]

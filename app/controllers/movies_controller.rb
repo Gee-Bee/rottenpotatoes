@@ -8,12 +8,27 @@ class MoviesController < ApplicationController
 
   def index
     # binding.pry
+    # Ratings
     @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings].nil? ? @all_ratings : params[:ratings].keys
+    if params[:ratings]
+      @selected_ratings = session[:ratings] = params[:ratings].keys
+    else
+      if session[:ratings]
+        @selected_ratings = session[:ratings]
+      else
+        @selected_ratings = session[:ratings] = @all_ratings
+      end
+    end
+    # @selected_ratings = params[:ratings].nil? ? @all_ratings : params[:ratings].keys
     @movies = Movie.where(rating: @selected_ratings)
+    # Sorting
     if params[:sort]
       @movies = @movies.order params[:sort]
       @ordered_by = params[:sort]
+      session[:sort] = params[:sort]
+    elsif session[:sort]
+        @movies = @movies.order session[:sort]
+        @ordered_by = session[:sort]
     end
   end
 

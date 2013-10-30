@@ -16,6 +16,7 @@ class MoviesController < ApplicationController
     else
       if session[:ratings]
         @selected_ratings = session[:ratings]
+        redirect = true
       else
         @selected_ratings = session[:ratings] = @all_ratings
       end
@@ -27,9 +28,19 @@ class MoviesController < ApplicationController
       @movies = @movies.order params[:sort]
       @ordered_by = params[:sort]
       session[:sort] = params[:sort]
+      sort = true
     elsif session[:sort]
-        @movies = @movies.order session[:sort]
-        @ordered_by = session[:sort]
+      @movies = @movies.order session[:sort]
+      @ordered_by = session[:sort]
+      redirect = true
+      sort = true
+    end
+    if redirect
+      flash.keep
+      sr = {}
+      @selected_ratings.each {|r| sr["ratings[#{r}]"] = 1}
+      sr[:sort] = @ordered_by if sort = true
+      redirect_to movies_path(sr) 
     end
   end
 

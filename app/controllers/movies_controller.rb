@@ -8,6 +8,30 @@ class MoviesController < ApplicationController
 
   def index
     session.clear if params[:clear_session]
+    @sort = 
+      if params[:sort] 
+        session[:sort] = params[:sort]
+      elsif session[:sort]
+        redirect = true
+        session[:sort]
+      end
+    @all_ratings = Movie.all_ratings
+    @selected_ratings = 
+      if params[:ratings]
+        session[:ratings] = params[:ratings]
+      elsif session[:ratings]
+        redirect = true
+        session[:ratings]
+      else
+        Hash[@all_ratings.map {|r| [r,1]}]
+      end
+    redirect_to sort: @sort, ratings: @selected_ratings if redirect
+    @movies = Movie.where(rating: @selected_ratings.keys).order(@sort)
+  end
+
+  # little less efficient : redirect also on params change
+  def index2
+    session.clear if params[:clear_session]
     @sort = params[:sort] || session[:sort]
     @all_ratings = Movie.all_ratings
     @selected_ratings = params[:ratings] || session[:ratings] || Hash[@all_ratings.map {|r| [r,1]}]

@@ -4,7 +4,7 @@ module MoviesHelper
     count.odd? ?  "odd" :  "even"
   end
   def hilite(name)
-    name == @ordered_by ? :hilite : ''
+    name == @sort ? :hilite : ''
   end
   
 end

@@ -3,7 +3,7 @@ module MoviesHelper
   def oddness(count)
     count.odd? ?  "odd" :  "even"
   end
-  def hilite(name)
+  def hilite?(name)
     name == @sort ? :hilite : ''
   end
   
